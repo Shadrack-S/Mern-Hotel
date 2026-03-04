@@ -10,6 +10,7 @@ import { v2 as cloudinary } from "cloudinary";
 import myHotelRoutes from "./routes/my-hotels";
 import hotelRoutes from "./routes/hotels";
 import bookingRoutes from "./routes/my-bookings";
+import morgan from "morgan";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -29,6 +30,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(morgan("dev"));
 
 app.use(express.static(path.join(__dirname, "../../frontend/dist")));
 
@@ -38,7 +40,10 @@ app.use("/api/my-hotels", myHotelRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/my-bookings", bookingRoutes);
 
-app.get("*", (req: Request, res: Response) => {
+// app.get("*", (req: Request, res: Response) => {
+//   res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
+// });
+app.use((req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../../frontend/dist/index.html"));
 });
 
